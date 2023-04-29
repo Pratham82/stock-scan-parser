@@ -2,7 +2,7 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import isEmpty from "lodash/isEmpty";
 
-import { stocksData } from "../../data";
+import stocksData from "./data";
 import { StockDataType, StockScan } from "../../types";
 
 export default function allStocksData(
