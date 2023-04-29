@@ -3,11 +3,11 @@ import type { NextApiRequest, NextApiResponse } from "next";
 import isEmpty from "lodash/isEmpty";
 
 import { stocksData } from "../data";
-import { StockDataType } from "../../types";
+import { StockDataType, StockScan } from "../../types";
 
 export default function allStocksData(
   req: NextApiRequest,
-  res: NextApiResponse<StockDataType>,
+  res: NextApiResponse<StockDataType | StockScan | { message: string }>,
 ) {
   // for fetching all stock data w/o any query
   if (isEmpty(req.query)) {
@@ -23,7 +23,7 @@ export default function allStocksData(
     const filteredStock = stocksData.filter(
       (stockData) => stockData.id === stockId,
     );
-    return res.status(200).json(filteredStock);
+    return res.status(200).json(filteredStock[0] as StockScan);
   }
   return res.status(404).json({ message: "Stock not present" });
 }
