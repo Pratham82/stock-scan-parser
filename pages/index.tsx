@@ -6,7 +6,7 @@ import LoadingStocks from "../components/LoadingStocks";
 import Stock from "./stock";
 import { useAPI } from "../hooks";
 
-const STOCKS_DATA_URL = "/api/stocks-data";
+const STOCKS_DATA_URL = "/api/stocks";
 
 const Home: NextPage = () => {
   const { data, isLoading } = useAPI({ url: STOCKS_DATA_URL });
