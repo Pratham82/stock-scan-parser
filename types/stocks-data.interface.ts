@@ -4,6 +4,7 @@ export interface StockScan {
   tag: string;
   color: string;
   criteria?: Criteria[] | null;
+  variant?: string;
 }
 export interface Criteria {
   type: string;

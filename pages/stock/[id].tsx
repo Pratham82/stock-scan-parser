@@ -3,6 +3,15 @@ import Image from "next/image";
 import { useRouter } from "next/router";
 import React from "react";
 
+import Stock from ".";
+import BackButton from "../../components/BackButton";
+import LoadingStocks from "../../components/LoadingStocks";
+import { useAPI } from "../../hooks";
+import { Criteria as CriteriaType, StockScan } from "../../types";
+import Criteria from "../criteria";
+
+const STOCK_URL = "/api/stocks";
+
 const StockDetails = () => {
   const router = useRouter();
   const { id } = router.query;
@@ -10,6 +19,14 @@ const StockDetails = () => {
   const handleBackClick = () => {
     router.back();
   };
+
+  const { data, isLoading = false } = useAPI({
+    url: `${STOCK_URL}/${id}`,
+  });
+
+  const { criteria = [] } = data as any;
+
+  const stockData = { ...(data as StockScan), variant: "details" };
 
   return (
     <div className="flex min-h-screen flex-col items-center justify-center py-2">
@@ -26,33 +43,30 @@ const StockDetails = () => {
           </a>
         </h1>
 
-        <div className="w-96">
-          <div className="mt-8 rounded-md border-2 py-8 px-4 pt-4 text-left">
-            <button
-              type="button"
-              className="text-md my-4 rounded-md bg-slate-500 px-4 py-3 text-white shadow-md hover:shadow-sm active:translate-x-0"
-              onClick={handleBackClick}
-            >
-              <div className="flex">
-                <div className="mr-3 w-6">
-                  <svg
-                    className="h-6 w-6"
-                    fill="currentColor"
-                    viewBox="0 0 20 20"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      fillRule="evenodd"
-                      d="M7.707 14.707a1 1 0 0 1-1.414 0l-4-4a1 1 0 0 1 0-1.414l4-4a1 1 0 0 1 1.414 1.414L5.414 9H17a1 1 0 1 1 0 2H5.414l2.293 2.293a1 1 0 0 1 0 1.414z"
-                      clipRule="evenodd"
-                    />
-                  </svg>
-                </div>
-                <span>Go Back</span>
-              </div>
-            </button>
+        <div className="w-96 text-left">
+          <BackButton
+            actions={{
+              onClick: handleBackClick,
+            }}
+          />
+        </div>
 
+        <div className="w-96">
+          <div className="mt-4 rounded-md border-2 py-8 px-4 pt-4 text-left">
             <h2>Stock Details About {id}</h2>
+            {isLoading ? (
+              <LoadingStocks states={1} />
+            ) : (
+              <div>
+                <Stock {...stockData} />
+                <div className="mt-4">
+                  <h3 className="text-xl">Criteria</h3>
+                  {criteria?.map((criteriaData: CriteriaType) => (
+                    <Criteria {...criteriaData} />
+                  ))}
+                </div>
+              </div>
+            )}
           </div>
         </div>
       </main>

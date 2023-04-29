@@ -1,9 +1,10 @@
 import { useCallback, useEffect, useState } from "react";
+import { StockDataType, StockScan } from "../types";
 
 const useAPI = (props: { url: string }) => {
   const { url = "" } = props;
 
-  const [data, setData] = useState([]);
+  const [data, setData] = useState<StockDataType | StockScan | []>([]);
   const [isLoading, setIsLoading] = useState(false);
 
   const fetchStockData = useCallback(async () => {

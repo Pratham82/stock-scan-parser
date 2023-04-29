@@ -5,11 +5,12 @@ import Image from "next/image";
 import LoadingStocks from "../components/LoadingStocks";
 import Stock from "./stock";
 import { useAPI } from "../hooks";
+import { StockScan } from "../types";
 
 const STOCKS_DATA_URL = "/api/stocks";
 
 const Home: NextPage = () => {
-  const { data, isLoading } = useAPI({ url: STOCKS_DATA_URL });
+  const { data = [] as any, isLoading } = useAPI({ url: STOCKS_DATA_URL });
 
   return (
     <div className="flex min-h-screen flex-col items-center justify-center py-2">
@@ -29,7 +30,7 @@ const Home: NextPage = () => {
         <div className="w-96">
           {!isLoading ? (
             <div className="mt-8 rounded-md border-2 py-8 px-4 pt-4 text-left">
-              {data?.map((stock) => (
+              {data.map((stock: StockScan) => (
                 <Stock {...stock} />
               ))}
             </div>
